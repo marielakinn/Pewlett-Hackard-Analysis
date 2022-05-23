@@ -49,3 +49,30 @@ FROM employees as e
 WHERE (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
 	AND (de.to_date = '9999-01-01')
 ORDER BY e.emp_no;
+
+Select * from unique_titles
+
+-- Deliverable 3 
+-- Add department # and name to unique_title table
+Select Distinct On (ut.emp_no) 
+	ut.emp_no, 
+	ut.first_name, 
+	ut.last_name, 
+	ut.title, 
+	de.dept_no, 
+	d.dept_name
+Into unique_dept
+FROM unique_titles as ut
+	Left Join dept_emp as de
+	On (ut.emp_no = de.emp_no)
+	Left Join departments as d
+	On (de.dept_no = d.dept_no)
+ORDER By ut.emp_no;	
+
+-- Count retirees by department
+SELECT COUNT(ud.emp_no), ud.dept_name
+INTO retiring_depts
+FROM unique_dept as ud
+GROUP BY ud.dept_name
+ORDER BY COUNT (ud.emp_no) DESC;
+
